@@ -1,0 +1,142 @@
+:root {
+  --sidebar-width: 220px;
+  --brand: #1e293b;
+  --brand-sec: #64748b;
+  --accent: #10b981;
+}
+
+body, html {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.app-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: row;
+}
+.sidebar {
+  width: var(--sidebar-width);
+  background: var(--brand);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  min-height: 100vh;
+  position: fixed;
+  left: 0; top: 0; bottom: 0;
+  z-index: 100;
+}
+.main-with-sidebar {
+  margin-left: var(--sidebar-width);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.main-full {
+  flex: 1 1 100%;
+  min-width: 0;
+}
+.brand {
+  font-size: 2rem;
+  text-align: center;
+  font-weight: bold;
+  margin: 1.25rem 0;
+  color: var(--accent);
+}
+.nav-item {
+  padding: 0.75rem 1.5rem;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  border-left: 4px solid transparent;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.nav-item.active {
+  background: #101827;
+  color: var(--accent);
+  border-left: 4px solid var(--accent);
+}
+.logout {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  margin: 1rem 1.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.btn, .btn-google, .btn-large {
+  padding: 0.7rem 1.2rem;
+  background: var(--button-bg);
+  color: var(--button-text);
+  border: none;
+  border-radius: 8px;
+  margin: 0.2rem 0;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+.btn-google { background: #ea4335; }
+.btn-large { font-size: 1.25rem; padding: 1.1rem 2rem;}
+.btn:hover { opacity: 0.92; }
+input[type="text"], input[type="email"], input[type="password"] {
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 0.6rem;
+  margin: 0.6rem 0;
+  font-size: 1rem;
+  width: 100%;
+}
+.topbar {
+  background: var(--brand-sec);
+  color: #fff;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 99;
+}
+.topbar-user { font-weight: 600; }
+.topbar-title { font-size: 1.1rem; font-weight: 500; letter-spacing: 0.02em; }
+.stats-grid, .builder-list, .backtest-table, .portfolio-table, .trading-table {
+  display: flex; flex-wrap: wrap; gap: 1rem;
+  margin: 1rem 0;
+}
+.stat-card, .builder-strategy-card, .backtest-result-card, .portfolio-strategy-card, .trading-position-card {
+  padding: 1.2rem 1.6rem;
+  background: var(--bg-secondary);
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  min-width: 160px;
+  flex: 1 1 220px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+.landing, .login, .dashboard, .builder, .backtest, .trading, .portfolio, .ai-assistant, .health {
+  max-width: 740px;
+  margin: 2.5rem auto;
+  padding: 1.2rem 1rem;
+  background: var(--bg-secondary);
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 16px rgba(30,41,59,0.07);
+}
+.ai-form { display: flex; flex-direction: row; gap: 1rem; }
+.ai-answer { margin-top: 1.5rem; font-size: 1.1rem; }
+.error { color: #ea4335; font-weight: bold; padding: 1rem;}
+@media (max-width: 900px) {
+  .app-layout, .main-with-sidebar { flex-direction: column; }
+  .sidebar { position: static; width: 100%; flex-direction: row; min-height: unset; }
+  .main-with-sidebar, .main-full { margin-left: 0; }
+  .topbar { padding: 0 1rem; }
+}
+@media (max-width: 650px) {
+  .stats-grid, .builder-list, .backtest-table, .portfolio-table, .trading-table { flex-direction: column; }
+}
