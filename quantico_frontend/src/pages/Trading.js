@@ -158,7 +158,13 @@ export default function Trading() {
 
       {error && (
         <div className="error" role="alert" aria-live="assertive">
-          {error}
+          {typeof error === "string"
+            ? error
+            : error && error.message
+              ? String(error.message)
+              : error && typeof error === "object"
+                ? JSON.stringify(error, null, 2)
+                : String(error)}
         </div>
       )}
 
@@ -169,15 +175,22 @@ export default function Trading() {
           loading ? <div>Loading positions...</div> :
             <div className="trading-table" style={{ display: "flex", flexWrap: "wrap", gap: "1em" }}>
               {portfolio && portfolio.length > 0 ? portfolio.map((p) => (
-                <div key={p.id || p.asset} className="trading-position-card" style={{
+                <div key={String(p.id ?? p.asset)} className="trading-position-card" style={{
                   minWidth: 220, background: "var(--bg-secondary)", borderRadius: 9, padding: 16, border: "1px solid var(--border-color)", boxShadow: "0 1px 6px rgba(30,41,59,0.05)", marginBottom: 6
                 }}>
-                  <div style={{ fontWeight: 600, fontSize: "1.07em" }}>{p.asset}</div>
-                  <div>
-                    <span>Qty: <b>{p.quantity}</b></span>
+                  <div style={{ fontWeight: 600, fontSize: "1.07em" }}>
+                    {typeof p.asset === "string" ? p.asset : String(p.asset ?? "")}
                   </div>
                   <div>
-                    <span>Avg. Cost: ${Number(p.cost_basis).toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
+                    <span>Qty: <b>{typeof p.quantity === "number" || typeof p.quantity === "string" ? p.quantity : "--"}</b></span>
+                  </div>
+                  <div>
+                    <span>
+                      Avg. Cost: $
+                      {isFinite(Number(p.cost_basis))
+                        ? Number(p.cost_basis).toLocaleString(undefined, { maximumFractionDigits: 2 })
+                        : "--"}
+                    </span>
                   </div>
                 </div>
               )) : (
@@ -289,8 +302,28 @@ export default function Trading() {
         >
           {formLoading ? "Placing..." : "Place Trade"}
         </button>
-        {formError && <div className="error" style={{ marginTop: 6 }} role="alert" aria-live="assertive">{formError}</div>}
-        {formSuccess && <div style={{ marginTop: 6, color: "#10b981", fontWeight: 600 }}>{formSuccess}</div>}
+        {formError && (
+          <div className="error" style={{ marginTop: 6 }} role="alert" aria-live="assertive">
+            {typeof formError === "string"
+              ? formError
+              : formError && formError.message
+                ? String(formError.message)
+                : formError && typeof formError === "object"
+                  ? JSON.stringify(formError, null, 2)
+                  : String(formError)}
+          </div>
+        )}
+        {formSuccess && (
+          <div style={{ marginTop: 6, color: "#10b981", fontWeight: 600 }}>
+            {typeof formSuccess === "string"
+              ? formSuccess
+              : formSuccess && formSuccess.message
+                ? String(formSuccess.message)
+                : formSuccess && typeof formSuccess === "object"
+                  ? JSON.stringify(formSuccess, null, 2)
+                  : String(formSuccess)}
+          </div>
+        )}
       </form>
 
       {/* SECTION: Trade Log */}
@@ -299,14 +332,26 @@ export default function Trading() {
         {loading ? <div>Loading trades...</div> :
           <div className="trading-table" style={{ display: "flex", flexWrap: "wrap", gap: "1em" }}>
             {trades && trades.length > 0 ? trades.map((t) => (
-              <div key={t.id} className="trading-position-card"
+              <div key={String(t.id ?? t.asset ?? Math.random())} className="trading-position-card"
                 style={{
                   minWidth: 225, background: "#f3f3f8", borderRadius: 11, padding: 16, border: "1px solid var(--border-color,#e9ecef)", boxShadow: "0 1px 7px rgba(190,190,210,0.07)"
                 }}
               >
-                <div style={{ fontWeight: 600 }}>{t.side === "buy" ? "Bought" : "Sold"} {t.qty} <span style={{ color: "#2763db" }}>{t.asset}</span></div>
-                <div>At price: <b>${Number(t.price).toLocaleString(undefined, { maximumFractionDigits: 4 })}</b></div>
-                {t.strategy_id && <div>Strategy #{t.strategy_id}</div>}
+                <div style={{ fontWeight: 600 }}>
+                  {typeof t.side === "string" ? (t.side === "buy" ? "Bought" : "Sold") : "Trade"}{" "}
+                  {typeof t.qty === "number" || typeof t.qty === "string" ? t.qty : "--"}{" "}
+                  <span style={{ color: "#2763db" }}>
+                    {typeof t.asset === "string" ? t.asset : String(t.asset ?? "")}
+                  </span>
+                </div>
+                <div>
+                  At price: <b>
+                    {isFinite(Number(t.price))
+                      ? `$${Number(t.price).toLocaleString(undefined, { maximumFractionDigits: 4 })}`
+                      : "--"}
+                  </b>
+                </div>
+                {t.strategy_id && <div>Strategy #{String(t.strategy_id)}</div>}
                 <div style={{ color: "#888", fontSize: ".97em" }}>
                   {formatTime(t.timestamp)}
                 </div>
