@@ -46,19 +46,44 @@ function useDragAndDrop(onDrop) {
   const dragDataRef = useRef(null);
   function onDragStart(e, item) {
     dragDataRef.current = item;
-    e.dataTransfer.effectAllowed = "move";
-    e.dataTransfer.setData("text/plain", JSON.stringify(item));
+    if (e?.dataTransfer) {
+      e.dataTransfer.effectAllowed = "move";
+      e.dataTransfer.setData("text/plain", JSON.stringify(item));
+    }
   }
   function onDragOver(e) {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = "move";
+    if (e && typeof e.preventDefault === "function") {
+      e.preventDefault();
+    }
+    if (e?.dataTransfer) {
+      e.dataTransfer.dropEffect = "move";
+    }
   }
-  function onDropHandler(e) {
-    e.preventDefault();
-    let item;
-    try {
-      item = JSON.parse(e.dataTransfer.getData("text/plain"));
-    } catch {
+  /**
+   * Handles both a real drop event (drag/drop) and a synthetic click trigger.
+   * Ensures preventDefault is only called if e is a real Event.
+   */
+  function onDropHandler(eOrItem) {
+    let item = null;
+    // Drag/drop event: e has dataTransfer and preventDefault
+    if (
+      eOrItem &&
+      typeof eOrItem === "object" &&
+      typeof eOrItem.preventDefault === "function" &&
+      eOrItem.dataTransfer
+    ) {
+      eOrItem.preventDefault();
+      try {
+        item = JSON.parse(eOrItem.dataTransfer.getData("text/plain"));
+      } catch {
+        item = dragDataRef.current;
+      }
+    }
+    // Synthetic/click: argument is the dropped item directly or null
+    else if (eOrItem && eOrItem.type && eOrItem.label) {
+      // It's an indicator item object (synthetic event)
+      item = eOrItem;
+    } else {
       item = dragDataRef.current;
     }
     if (item && onDrop) onDrop(item);
