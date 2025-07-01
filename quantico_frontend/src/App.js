@@ -6,6 +6,7 @@ import Sidebar from "./components/Sidebar";
 import Topbar from "./components/Topbar";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Builder from "./pages/Builder";
 import Backtest from "./pages/Backtest";
@@ -24,6 +25,7 @@ function AppRoutes() {
         <Topbar />
         <Routes>
           <Route path="/" element={<Landing />} />
+          <Route path="/register" element={token ? <Navigate to="/dashboard"/> : <Register />} />
           <Route path="/login" element={token ? <Navigate to="/dashboard"/> : <Login />} />
           <Route path="/dashboard" element={token ? <Dashboard /> : <Navigate to="/login" />} />
           <Route path="/builder" element={token ? <Builder /> : <Navigate to="/login" />} />

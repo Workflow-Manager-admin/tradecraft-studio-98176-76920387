@@ -10,7 +10,10 @@ export default function Landing() {
         Modern, responsive dashboard. AI-powered.<br/>
         Backtest, trade, track portfolios, integrate with top brokers.
       </p>
-      <Link to="/login" className="btn btn-large">Get Started</Link>
+      <Link to="/register" className="btn btn-large">Get Started</Link>
+      <div style={{ marginTop: "1rem" }}>
+        Already have an account? <Link to="/login">Sign in</Link>
+      </div>
     </section>
   );
 }
