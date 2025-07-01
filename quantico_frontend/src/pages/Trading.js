@@ -109,9 +109,28 @@ export default function Trading() {
       return;
     }
 
+    // Compose id: ensure always present in tradePayload as required by backend
+    let id = undefined;
+    if (form.strategy_id) {
+      // If strategy_id provided by user for this trade, use as id for required PaperTrade.id (backend expects integer, required)
+      id = Number(form.strategy_id);
+    } else if (trades && Array.isArray(trades) && trades.length > 0) {
+      // Use one greater than max id in trades to avoid collisions (for demo paper trading)
+      id = Math.max(...trades.map(t => typeof t.id === "number" ? t.id : 0), 0) + 1;
+    } else {
+      // Fallback to 1 as starter id
+      id = 1;
+    }
+    if (!id || !Number.isFinite(id)) {
+      setFormError("No valid 'id' available for this trade. (Contextual id missing; trade not sent.)");
+      setFormLoading(false);
+      return;
+    }
+
     try {
       // OpenAPI spec: POST /trades with PaperTrade payload
       const tradePayload = {
+        id, // always present
         asset: form.asset.trim().toUpperCase(),
         side: form.side,
         qty: Number(form.qty),
