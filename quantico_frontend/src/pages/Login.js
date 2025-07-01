@@ -84,7 +84,11 @@ export default function Login() {
 
   // Always initiate only backend OAuth (no client-side bypass possible)
   function onGoogleLogin() {
-    window.location.href = (process.env.REACT_APP_BACKEND_URL || "http://localhost:3001") + "/auth/google/login";
+    // Use centralized config for backend URL
+    // Import here if not already imported to avoid cyclic dependency in SSR contexts
+    // eslint-disable-next-line no-restricted-imports
+    const { BACKEND_URL } = require("../config");
+    window.location.href = BACKEND_URL + "/auth/google/login";
   }
 
   // "Show password" toggle state

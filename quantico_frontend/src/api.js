@@ -2,7 +2,8 @@
 // API client for Quantico Frontend
 // Handles REST API requests and error management per backend specification.
 //
-const BASE_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:3001";
+import { BACKEND_URL } from "./config";
+const BASE_URL = BACKEND_URL;
 
 // Helper for unified fetch with error handling
 // PUBLIC_INTERFACE

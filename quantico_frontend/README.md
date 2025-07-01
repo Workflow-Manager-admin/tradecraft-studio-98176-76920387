@@ -11,6 +11,21 @@ This project provides a minimal React template with a clean, modern UI and minim
 
 ## Getting Started
 
+### Backend URL Configuration
+
+By default, the Quantico frontend talks to the backend at  
+`https://vscode-internal-287130-beta.beta01.cloud.kavia.ai:3001`
+
+To use a different backend API URL (such as on localhost or your own server), create a `.env` file in the project root:
+
+```
+REACT_APP_BACKEND_URL=http://localhost:3001
+```
+Or set this variable in your deployment environment.
+
+All API requests and OAuth redirects use this value via `src/config.js`.  
+No code changes required for most deployments.
+
 In the project directory, you can run:
 
 ### `npm start`
