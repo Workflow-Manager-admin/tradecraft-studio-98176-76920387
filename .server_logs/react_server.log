@@ -6,9 +6,9 @@ Attempting to bind to HOST environment variable: 0.0.0.0
 If this was unintentional, check that you haven't mistakenly set it in your shell.
 Learn more here: https://cra.link/advanced-config
 
-(node:51716) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(node:56037) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
 (Use `node --trace-deprecation ...` to show where the warning was created)
-(node:51716) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(node:56037) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
 Starting the development server...
 
 Compiled successfully!
@@ -23,32 +23,297 @@ To create a production build, use npm run build.
 
 webpack compiled successfully
 Compiling...
-Compiled with warnings.
+Failed to compile.
 
 [eslint] 
-src/api.js
-  Line 32:5:  Expected an error object to be thrown  no-throw-literal
+src/pages/Login.js
+Syntax error: Missing catch or finally clause. (48:4) (48:4)
+ERROR in ./src/pages/Login.js
+Module build failed (from ./node_modules/babel-loader/lib/index.js):
+SyntaxError: /home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/src/pages/Login.js: Missing catch or finally clause. (48:4)
 
-Search for the keywords to learn more about each warning.
-To ignore, add // eslint-disable-next-line to the line before.
+  46 |     setLoading(true);
+  47 |
+> 48 |     try {
+     |     ^
+  49 |       // Backend requires form-encoded data for /auth/token (OAuth2PasswordBearer).
+  50 |       // Step 1: POST /auth/token with application/x-www-form-urlencoded
+  51 |       let tokenResp;
+    at constructor (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:360:19)
+    at FlowParserMixin.raise (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:3327:19)
+    at FlowParserMixin.parseTryStatement (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12868:12)
+    at FlowParserMixin.parseStatementContent (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12443:21)
+    at FlowParserMixin.parseStatementLike (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12406:17)
+    at FlowParserMixin.parseStatementLike (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:5140:24)
+    at FlowParserMixin.parseStatementListItem (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12386:17)
+    at FlowParserMixin.parseBlockOrModuleBlockBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12960:61)
+    at FlowParserMixin.parseBlockBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12953:10)
+    at FlowParserMixin.parseBlock (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12941:10)
+    at FlowParserMixin.parseFunctionBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:11783:24)
+    at FlowParserMixin.parseFunctionBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:5117:11)
+    at FlowParserMixin.parseFunctionBodyAndFinish (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:11769:10)
+    at FlowParserMixin.parseFunctionBodyAndFinish (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:5125:18)
+    at /home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:13085:12
+    at FlowParserMixin.withSmartMixTopicForbiddingContext (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12077:14)
+    at FlowParserMixin.parseFunction (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:13084:10)
+    at FlowParserMixin.parseFunctionStatement (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12769:17)
+    at FlowParserMixin.parseStatementContent (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12534:25)
+    at FlowParserMixin.parseStatementLike (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12406:17)
+    at FlowParserMixin.parseStatementLike (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:5140:24)
+    at FlowParserMixin.parseStatementListItem (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12386:17)
+    at FlowParserMixin.parseBlockOrModuleBlockBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12960:61)
+    at FlowParserMixin.parseBlockBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12953:10)
+    at FlowParserMixin.parseBlock (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12941:10)
+    at FlowParserMixin.parseFunctionBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:11783:24)
+    at FlowParserMixin.parseFunctionBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:5117:11)
+    at FlowParserMixin.parseFunctionBodyAndFinish (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:11769:10)
+    at FlowParserMixin.parseFunctionBodyAndFinish (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:5125:18)
+    at /home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:13085:12
+    at FlowParserMixin.withSmartMixTopicForbiddingContext (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12077:14)
+    at FlowParserMixin.parseFunction (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:13084:10)
+    at FlowParserMixin.parseExportDefaultExpression (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:13539:19)
+    at FlowParserMixin.parseExportDefaultExpression (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:5188:18)
+    at FlowParserMixin.parseExport (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:13465:25)
+    at FlowParserMixin.parseStatementContent (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12519:27)
+    at FlowParserMixin.parseStatementLike (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12406:17)
+    at FlowParserMixin.parseStatementLike (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:5140:24)
+    at FlowParserMixin.parseModuleItem (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12383:17)
+    at FlowParserMixin.parseBlockOrModuleBlockBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12960:36)
+    at FlowParserMixin.parseBlockBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12953:10)
+    at FlowParserMixin.parseProgram (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12280:10)
+    at FlowParserMixin.parseTopLevel (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12270:25)
+    at FlowParserMixin.parseTopLevel (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:5909:28)
+    at FlowParserMixin.parse (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:14120:10)
+    at parse (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:14154:38)
+    at parser (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/core/lib/parser/index.js:41:34)
+    at parser.next (<anonymous>)
+    at normalizeFile (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/core/lib/transformation/normalize-file.js:64:37)
+    at normalizeFile.next (<anonymous>)
 
-WARNING in [eslint] 
-src/api.js
-  Line 32:5:  Expected an error object to be thrown  no-throw-literal
+ERROR in [eslint] 
+src/pages/Login.js
+  Line 48:4:  Parsing error: Missing catch or finally clause. (48:4)
 
-webpack compiled with 1 warning
+webpack compiled with 2 errors
 Compiling...
-Compiled with warnings.
+Failed to compile.
 
 [eslint] 
-src/api.js
-  Line 32:5:  Expected an error object to be thrown  no-throw-literal
+src/pages/Login.js
+Syntax error: Missing catch or finally clause. (49:4) (49:4)
+ERROR in ./src/pages/Login.js
+Module build failed (from ./node_modules/babel-loader/lib/index.js):
+SyntaxError: /home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/src/pages/Login.js: Missing catch or finally clause. (49:4)
 
-Search for the keywords to learn more about each warning.
-To ignore, add // eslint-disable-next-line to the line before.
+  47 |     setLoading(true);
+  48 |
+> 49 |     try {
+     |     ^
+  50 |       // Backend requires form-encoded data for /auth/token (OAuth2PasswordBearer).
+  51 |       // Step 1: POST /auth/token with application/x-www-form-urlencoded
+  52 |       let tokenResp;
+    at constructor (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:360:19)
+    at FlowParserMixin.raise (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:3327:19)
+    at FlowParserMixin.parseTryStatement (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12868:12)
+    at FlowParserMixin.parseStatementContent (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12443:21)
+    at FlowParserMixin.parseStatementLike (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12406:17)
+    at FlowParserMixin.parseStatementLike (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:5140:24)
+    at FlowParserMixin.parseStatementListItem (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12386:17)
+    at FlowParserMixin.parseBlockOrModuleBlockBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12960:61)
+    at FlowParserMixin.parseBlockBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12953:10)
+    at FlowParserMixin.parseBlock (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12941:10)
+    at FlowParserMixin.parseFunctionBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:11783:24)
+    at FlowParserMixin.parseFunctionBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:5117:11)
+    at FlowParserMixin.parseFunctionBodyAndFinish (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:11769:10)
+    at FlowParserMixin.parseFunctionBodyAndFinish (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:5125:18)
+    at /home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:13085:12
+    at FlowParserMixin.withSmartMixTopicForbiddingContext (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12077:14)
+    at FlowParserMixin.parseFunction (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:13084:10)
+    at FlowParserMixin.parseFunctionStatement (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12769:17)
+    at FlowParserMixin.parseStatementContent (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12534:25)
+    at FlowParserMixin.parseStatementLike (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12406:17)
+    at FlowParserMixin.parseStatementLike (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:5140:24)
+    at FlowParserMixin.parseStatementListItem (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12386:17)
+    at FlowParserMixin.parseBlockOrModuleBlockBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12960:61)
+    at FlowParserMixin.parseBlockBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12953:10)
+    at FlowParserMixin.parseBlock (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12941:10)
+    at FlowParserMixin.parseFunctionBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:11783:24)
+    at FlowParserMixin.parseFunctionBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:5117:11)
+    at FlowParserMixin.parseFunctionBodyAndFinish (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:11769:10)
+    at FlowParserMixin.parseFunctionBodyAndFinish (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:5125:18)
+    at /home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:13085:12
+    at FlowParserMixin.withSmartMixTopicForbiddingContext (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12077:14)
+    at FlowParserMixin.parseFunction (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:13084:10)
+    at FlowParserMixin.parseExportDefaultExpression (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:13539:19)
+    at FlowParserMixin.parseExportDefaultExpression (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:5188:18)
+    at FlowParserMixin.parseExport (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:13465:25)
+    at FlowParserMixin.parseStatementContent (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12519:27)
+    at FlowParserMixin.parseStatementLike (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12406:17)
+    at FlowParserMixin.parseStatementLike (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:5140:24)
+    at FlowParserMixin.parseModuleItem (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12383:17)
+    at FlowParserMixin.parseBlockOrModuleBlockBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12960:36)
+    at FlowParserMixin.parseBlockBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12953:10)
+    at FlowParserMixin.parseProgram (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12280:10)
+    at FlowParserMixin.parseTopLevel (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12270:25)
+    at FlowParserMixin.parseTopLevel (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:5909:28)
+    at FlowParserMixin.parse (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:14120:10)
+    at parse (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:14154:38)
+    at parser (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/core/lib/parser/index.js:41:34)
+    at parser.next (<anonymous>)
+    at normalizeFile (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/core/lib/transformation/normalize-file.js:64:37)
+    at normalizeFile.next (<anonymous>)
 
-WARNING in [eslint] 
-src/api.js
-  Line 32:5:  Expected an error object to be thrown  no-throw-literal
+ERROR in [eslint] 
+src/pages/Login.js
+  Line 49:4:  Parsing error: Missing catch or finally clause. (49:4)
 
-webpack compiled with 1 warning
+webpack compiled with 2 errors
+Compiling...
+Failed to compile.
+
+[eslint] 
+src/pages/Login.js
+Syntax error: Missing catch or finally clause. (49:4) (49:4)
+ERROR in ./src/pages/Login.js
+Module build failed (from ./node_modules/babel-loader/lib/index.js):
+SyntaxError: /home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/src/pages/Login.js: Missing catch or finally clause. (49:4)
+
+  47 |     setLoading(true);
+  48 |
+> 49 |     try {
+     |     ^
+  50 |       // Backend requires form-encoded data for /auth/token (OAuth2PasswordBearer).
+  51 |       // Step 1: POST /auth/token with application/x-www-form-urlencoded
+  52 |       let tokenResp;
+    at constructor (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:360:19)
+    at FlowParserMixin.raise (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:3327:19)
+    at FlowParserMixin.parseTryStatement (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12868:12)
+    at FlowParserMixin.parseStatementContent (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12443:21)
+    at FlowParserMixin.parseStatementLike (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12406:17)
+    at FlowParserMixin.parseStatementLike (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:5140:24)
+    at FlowParserMixin.parseStatementListItem (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12386:17)
+    at FlowParserMixin.parseBlockOrModuleBlockBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12960:61)
+    at FlowParserMixin.parseBlockBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12953:10)
+    at FlowParserMixin.parseBlock (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12941:10)
+    at FlowParserMixin.parseFunctionBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:11783:24)
+    at FlowParserMixin.parseFunctionBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:5117:11)
+    at FlowParserMixin.parseFunctionBodyAndFinish (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:11769:10)
+    at FlowParserMixin.parseFunctionBodyAndFinish (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:5125:18)
+    at /home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:13085:12
+    at FlowParserMixin.withSmartMixTopicForbiddingContext (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12077:14)
+    at FlowParserMixin.parseFunction (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:13084:10)
+    at FlowParserMixin.parseFunctionStatement (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12769:17)
+    at FlowParserMixin.parseStatementContent (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12534:25)
+    at FlowParserMixin.parseStatementLike (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12406:17)
+    at FlowParserMixin.parseStatementLike (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:5140:24)
+    at FlowParserMixin.parseStatementListItem (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12386:17)
+    at FlowParserMixin.parseBlockOrModuleBlockBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12960:61)
+    at FlowParserMixin.parseBlockBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12953:10)
+    at FlowParserMixin.parseBlock (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12941:10)
+    at FlowParserMixin.parseFunctionBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:11783:24)
+    at FlowParserMixin.parseFunctionBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:5117:11)
+    at FlowParserMixin.parseFunctionBodyAndFinish (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:11769:10)
+    at FlowParserMixin.parseFunctionBodyAndFinish (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:5125:18)
+    at /home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:13085:12
+    at FlowParserMixin.withSmartMixTopicForbiddingContext (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12077:14)
+    at FlowParserMixin.parseFunction (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:13084:10)
+    at FlowParserMixin.parseExportDefaultExpression (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:13539:19)
+    at FlowParserMixin.parseExportDefaultExpression (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:5188:18)
+    at FlowParserMixin.parseExport (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:13465:25)
+    at FlowParserMixin.parseStatementContent (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12519:27)
+    at FlowParserMixin.parseStatementLike (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12406:17)
+    at FlowParserMixin.parseStatementLike (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:5140:24)
+    at FlowParserMixin.parseModuleItem (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12383:17)
+    at FlowParserMixin.parseBlockOrModuleBlockBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12960:36)
+    at FlowParserMixin.parseBlockBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12953:10)
+    at FlowParserMixin.parseProgram (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12280:10)
+    at FlowParserMixin.parseTopLevel (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12270:25)
+    at FlowParserMixin.parseTopLevel (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:5909:28)
+    at FlowParserMixin.parse (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:14120:10)
+    at parse (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:14154:38)
+    at parser (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/core/lib/parser/index.js:41:34)
+    at parser.next (<anonymous>)
+    at normalizeFile (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/core/lib/transformation/normalize-file.js:64:37)
+    at normalizeFile.next (<anonymous>)
+
+ERROR in [eslint] 
+src/pages/Login.js
+  Line 49:4:  Parsing error: Missing catch or finally clause. (49:4)
+
+webpack compiled with 2 errors
+Compiling...
+Failed to compile.
+
+[eslint] 
+src/pages/Login.js
+Syntax error: Missing catch or finally clause. (49:4) (49:4)
+ERROR in ./src/pages/Login.js
+Module build failed (from ./node_modules/babel-loader/lib/index.js):
+SyntaxError: /home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/src/pages/Login.js: Missing catch or finally clause. (49:4)
+
+  47 |     setLoading(true);
+  48 |
+> 49 |     try {
+     |     ^
+  50 |       // Backend requires form-encoded data for /auth/token (OAuth2PasswordBearer).
+  51 |       // Step 1: POST /auth/token with application/x-www-form-urlencoded
+  52 |       try {
+    at constructor (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:360:19)
+    at FlowParserMixin.raise (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:3327:19)
+    at FlowParserMixin.parseTryStatement (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12868:12)
+    at FlowParserMixin.parseStatementContent (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12443:21)
+    at FlowParserMixin.parseStatementLike (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12406:17)
+    at FlowParserMixin.parseStatementLike (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:5140:24)
+    at FlowParserMixin.parseStatementListItem (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12386:17)
+    at FlowParserMixin.parseBlockOrModuleBlockBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12960:61)
+    at FlowParserMixin.parseBlockBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12953:10)
+    at FlowParserMixin.parseBlock (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12941:10)
+    at FlowParserMixin.parseFunctionBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:11783:24)
+    at FlowParserMixin.parseFunctionBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:5117:11)
+    at FlowParserMixin.parseFunctionBodyAndFinish (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:11769:10)
+    at FlowParserMixin.parseFunctionBodyAndFinish (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:5125:18)
+    at /home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:13085:12
+    at FlowParserMixin.withSmartMixTopicForbiddingContext (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12077:14)
+    at FlowParserMixin.parseFunction (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:13084:10)
+    at FlowParserMixin.parseFunctionStatement (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12769:17)
+    at FlowParserMixin.parseStatementContent (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12534:25)
+    at FlowParserMixin.parseStatementLike (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12406:17)
+    at FlowParserMixin.parseStatementLike (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:5140:24)
+    at FlowParserMixin.parseStatementListItem (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12386:17)
+    at FlowParserMixin.parseBlockOrModuleBlockBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12960:61)
+    at FlowParserMixin.parseBlockBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12953:10)
+    at FlowParserMixin.parseBlock (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12941:10)
+    at FlowParserMixin.parseFunctionBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:11783:24)
+    at FlowParserMixin.parseFunctionBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:5117:11)
+    at FlowParserMixin.parseFunctionBodyAndFinish (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:11769:10)
+    at FlowParserMixin.parseFunctionBodyAndFinish (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:5125:18)
+    at /home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:13085:12
+    at FlowParserMixin.withSmartMixTopicForbiddingContext (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12077:14)
+    at FlowParserMixin.parseFunction (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:13084:10)
+    at FlowParserMixin.parseExportDefaultExpression (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:13539:19)
+    at FlowParserMixin.parseExportDefaultExpression (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:5188:18)
+    at FlowParserMixin.parseExport (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:13465:25)
+    at FlowParserMixin.parseStatementContent (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12519:27)
+    at FlowParserMixin.parseStatementLike (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12406:17)
+    at FlowParserMixin.parseStatementLike (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:5140:24)
+    at FlowParserMixin.parseModuleItem (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12383:17)
+    at FlowParserMixin.parseBlockOrModuleBlockBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12960:36)
+    at FlowParserMixin.parseBlockBody (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12953:10)
+    at FlowParserMixin.parseProgram (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12280:10)
+    at FlowParserMixin.parseTopLevel (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:12270:25)
+    at FlowParserMixin.parseTopLevel (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:5909:28)
+    at FlowParserMixin.parse (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:14120:10)
+    at parse (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/parser/lib/index.js:14154:38)
+    at parser (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/core/lib/parser/index.js:41:34)
+    at parser.next (<anonymous>)
+    at normalizeFile (/home/kavia/workspace/code-generation/tradecraft-studio-98176-76920387/quantico_frontend/node_modules/@babel/core/lib/transformation/normalize-file.js:64:37)
+    at normalizeFile.next (<anonymous>)
+
+ERROR in [eslint] 
+src/pages/Login.js
+  Line 49:4:  Parsing error: Missing catch or finally clause. (49:4)
+
+webpack compiled with 2 errors
+Compiling...
+Compiled successfully!
+webpack compiled successfully

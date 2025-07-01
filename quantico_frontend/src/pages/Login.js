@@ -4,13 +4,14 @@ import { useAuth } from "../context";
 
 /**
  * Login page component for Quantico frontend.
- * Handles email/password login, invokes backend, blocks bypass,
- * provides clear and secure messaging, and performs validation.
+ * Handles email/password login and robust backend integration.
  *
- * - Ensures ONLY backend-originating token/user enables login
- * - Handles all backend error cases with messages
- * - Prevents login-button bypass or client-side fake success
- * - Performs both field-level/form-level validation
+ * - Sends credentials (username = email, password) as x-www-form-urlencoded to POST /auth/token
+ * - Uses returned access_token to fetch user profile at /user/me (GET, with Bearer token)
+ * - Only logs in if token and user present
+ * - Handles backend 401, 404, 422 errors distinctly and translates them to user-friendly messages
+ * - Never allows client bypass; only backend success proceeds
+ * - Both field-level/form-level validation prior to network request
  * - Redirect is managed by parent Route (see App.js)
  */
 
@@ -46,28 +47,44 @@ export default function Login() {
     setLoading(true);
 
     try {
-      // Prefer FastAPI spec naming: username/password
-      const resp = await apiFetch("/auth/login", {
+      // Step 1: POST /auth/token as form-urlencoded
+      const data = new URLSearchParams();
+      data.append("username", email);
+      data.append("password", password);
+
+      const tokenResp = await apiFetch("/auth/token", {
         method: "POST",
-        data: { username: email, password }
+        data: data,
+        isForm: true,
+        headers: { "Content-Type": "application/x-www-form-urlencoded" }
       });
 
-      // Only allow login if backend confirms identity and sends BOTH:
-      // access_token (jwt or similar) AND user object.
-      if (resp && resp.access_token && resp.user) {
-        login(resp.access_token, resp.user);
-        setError(null); // Defensive
-        // Redirect is handled by App.js Route (see Navigate after login)
+      // Step 2: Use token to fetch user profile
+      if (tokenResp && tokenResp.access_token) {
+        const userProfile = await apiFetch("/user/me", {
+          method: "GET",
+          token: tokenResp.access_token
+        });
+        if (userProfile && userProfile.email) {
+          login(tokenResp.access_token, userProfile);
+          setError(null);
+          // Redirect handled by parent route
+        } else {
+          setError("Login succeeded, but user profile fetch failed.");
+        }
       } else {
-        // Unexpected response structure, block login
-        setError("Login response is malformed. Please contact support.");
+        setError("Login failed, no token provided.");
       }
     } catch (err) {
-      // Parse FastAPI/REST error semantics and display user-friendly error
+      // Error handling for both token and profile fetch (distinguish by step)
       let message = "Login failed. Please try again.";
       if (err && typeof err === "object") {
         if (err.status === 401 || (err.message && err.message.toLowerCase().includes("invalid"))) {
           message = "Invalid email or password.";
+        } else if (err.status === 404) {
+          message = "User account not found (register first).";
+        } else if (err.status === 422) {
+          message = "Invalid data. Please check your input.";
         } else if (err.status === 429) {
           message = "Too many login attempts. Please wait and try again.";
         } else if (err.status === 0 || err.status === 502 || err.status === 503) {
