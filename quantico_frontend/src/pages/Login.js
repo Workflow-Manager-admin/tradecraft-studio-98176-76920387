@@ -13,13 +13,27 @@ export default function Login() {
     e.preventDefault();
     setError(null);
     try {
+      setError(null);
+      // Most FastAPI auth endpoints expect username, not email, and 'password' fields.
+      // Try payload with 'username' instead of 'email' if backend requires it.
       const resp = await apiFetch("/auth/login", {
         method: "POST",
-        data: { email, password }
+        data: { username: email, password } // fix to match common FastAPI backend expectations
       });
-      login(resp.access_token, resp.user);
+      // On success: resp.access_token & resp.user must exist
+      if (resp && resp.access_token && resp.user) {
+        login(resp.access_token, resp.user);
+      } else {
+        setError("Unexpected response. Please contact support.");
+      }
     } catch (err) {
-      setError("Invalid login.");
+      if (err && (err.status === 401 || (err.message && err.message.toLowerCase().includes("invalid")))) {
+        setError("Invalid email or password.");
+      } else if (err && err.message) {
+        setError(err.message); // show any other API error messages that aren't credentials related
+      } else {
+        setError("Unable to login. Please try again later.");
+      }
     }
   }
 
