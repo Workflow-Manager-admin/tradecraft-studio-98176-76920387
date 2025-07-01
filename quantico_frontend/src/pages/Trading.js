@@ -11,26 +11,33 @@ const SIDE_OPTIONS = [
   { value: "sell", label: "Sell" },
 ];
 
+// Initial demo virtual capital
+const INITIAL_VIRTUAL_CAPITAL = 100000;
+
 // PUBLIC_INTERFACE
 /**
- * The Paper Trading page.
- * - Fetches and auto-refreshes user portfolio (GET /portfolio), open positions (GET /portfolio), and trade logs (GET /trades).
- * - Allows submitting paper buy/sell trades (POST /trades), real backend mutation.
- * - Shows a unified error/loading state for all critical flows.
- * - All display/content/fields per OpenAPI contract; no speculative fields.
+ * The Paper Trading page with live price simulation, virtual capital,
+ * and trade log featuring profit/loss per trade. Data is live and backend-synced.
  */
 export default function Trading() {
   const { token, user } = useAuth();
   const isMounted = useRef(true);
 
   // SECTION: State
-  const [portfolio, setPortfolio] = useState([]); // holdings
-  const [trades, setTrades] = useState([]); // trade logs
-  const [positions, setPositions] = useState([]); // open positions (calculate from trades/portfolio if needed)
+  const [portfolio, setPortfolio] = useState([]);
+  const [trades, setTrades] = useState([]);
+  const [positions, setPositions] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Trade form
+  // For market prices (live pricing for current asset; simple demo gets only price for simulation)
+  const [marketPrice, setMarketPrice] = useState(null);
+  const [priceAsset, setPriceAsset] = useState(""); // asset requested for price
+
+  // Virtual Capital
+  const [virtualCapital, setVirtualCapital] = useState(INITIAL_VIRTUAL_CAPITAL);
+
+  // Trade form state
   const [form, setForm] = useState({
     asset: "",
     side: "buy",
@@ -42,10 +49,10 @@ export default function Trading() {
   const [formError, setFormError] = useState(null);
   const [formSuccess, setFormSuccess] = useState(null);
 
-  // Refresh intervals
+  // Refresh interval
   const refreshTimer = useRef(null);
 
-  // SECTION: Fetch Data
+  // --- Fetch all trading/portfolio/trade log
   const fetchAll = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -55,11 +62,13 @@ export default function Trading() {
         apiFetch("/trades", { token }),
       ]);
       if (!isMounted.current) return;
+
       setPortfolio(Array.isArray(portfolioResp) ? portfolioResp : []);
-      setTrades(Array.isArray(tradesResp) ? tradesResp.sort((a, b) =>
-        new Date(b.timestamp) - new Date(a.timestamp)
-      ) : []);
-      // Calculate open positions
+      const sortedTrades = Array.isArray(tradesResp) ? tradesResp.sort((a, b) =>
+        new Date(a.timestamp) - new Date(b.timestamp)
+      ) : [];
+      setTrades(sortedTrades);
+
       setPositions(getOpenPositions(portfolioResp, tradesResp));
     } catch (err) {
       setError(err?.message || "Could not load trading/portfolio data.");
@@ -67,17 +76,89 @@ export default function Trading() {
     setLoading(false);
   }, [token]);
 
-  // Initial and interval fetch
+  // On mount and poll
   useEffect(() => {
     isMounted.current = true;
     fetchAll();
-    // Auto-refresh
     refreshTimer.current = setInterval(fetchAll, REFRESH_MS);
+
     return () => {
       isMounted.current = false;
       if (refreshTimer.current) clearInterval(refreshTimer.current);
     };
   }, [fetchAll]);
+
+  // Update virtual capital as trades change
+  useEffect(() => {
+    // Simulate capital computation from trades: start with 100,000. Subtract buying cost, add sell revenue.
+    let capital = INITIAL_VIRTUAL_CAPITAL;
+    // Sorted oldest -> newest for correct buy-sell netting
+    const sortedTrades = Array.isArray(trades) ? [...trades].sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)) : [];
+    for (let t of sortedTrades) {
+      if (!t.qty || !t.price) continue;
+      if (t.side === "buy") {
+        capital -= (Number(t.qty) * Number(t.price));
+      } else if (t.side === "sell") {
+        capital += (Number(t.qty) * Number(t.price));
+      }
+    }
+    setVirtualCapital(Number(capital.toFixed(2)));
+  }, [trades]);
+
+  // --- Market price fetch for the current asset in the trade form
+  useEffect(() => {
+    // Fetch current market price for form.asset when it changes
+    async function fetchPrice() {
+      if (!form.asset) {
+        setMarketPrice(null);
+        return;
+      }
+      setPriceAsset(form.asset);
+      try {
+        // Use endpoint: /integration/chart?asset=ASSET&start_date=YYYY-MM-DD&end_date=YYYY-MM-DD&resolution=1d
+        // We'll use only today's price for quote simulation.
+        const asset = form.asset.toUpperCase().slice(0, 10);
+        const today = (new Date()).toISOString().slice(0, 10); // YYYY-MM-DD
+        const resp = await apiFetch("/integration/chart", {
+          params: {
+            asset,
+            start_date: today,
+            end_date: today,
+            resolution: "1d"
+          },
+          token,
+        });
+        // Try to find latest close/price in candles/ohlc/prices
+        let price = null;
+        if (resp && Array.isArray(resp.ohlc) && resp.ohlc.length > 0) {
+          price = resp.ohlc[resp.ohlc.length-1].close;
+        } else if (resp && Array.isArray(resp.candles) && resp.candles.length > 0) {
+          price = resp.candles[resp.candles.length-1].close;
+        } else if (resp && Array.isArray(resp.prices) && resp.prices.length > 0) {
+          price = resp.prices[resp.prices.length-1].close || resp.prices[resp.prices.length-1].price;
+        } else if (Array.isArray(resp) && resp.length > 0) {
+          price = resp[resp.length-1].close || resp[resp.length-1].price;
+        }
+        setMarketPrice(isFinite(price) ? Number(price) : null);
+      } catch {
+        setMarketPrice(null);
+      }
+    }
+    fetchPrice();
+  // eslint-disable-next-line
+  }, [form.asset, token]);
+
+  // Auto-fill price field on asset change if marketPrice available and price is empty or mismatched asset
+  useEffect(() => {
+    if (
+      form.asset &&
+      marketPrice &&
+      (form.price === "" || String(priceAsset).toUpperCase() !== form.asset.toUpperCase())
+    ) {
+      setForm(f => ({ ...f, price: marketPrice }));
+    }
+    // eslint-disable-next-line
+  }, [marketPrice]);
 
   // SECTION: Trade form handlers
   function handleFormChange(e) {
@@ -85,6 +166,11 @@ export default function Trading() {
     setForm(f => ({ ...f, [name]: value }));
     setFormError(null);
     setFormSuccess(null);
+    // If asset changed, clear price to allow latest marketPrice autofill.
+    if (name === "asset") {
+      setMarketPrice(null);
+      setForm(f => ({ ...f, price: "" }));
+    }
   }
 
   async function onSubmitTrade(e) {
@@ -93,7 +179,6 @@ export default function Trading() {
     setFormError(null);
     setFormSuccess(null);
 
-    // Validate all form fields exist, qty/price > 0, asset non-empty
     if (
       !form.asset ||
       !form.side ||
@@ -112,13 +197,10 @@ export default function Trading() {
     // Compose id: ensure always present in tradePayload as required by backend
     let id = undefined;
     if (form.strategy_id) {
-      // If strategy_id provided by user for this trade, use as id for required PaperTrade.id (backend expects integer, required)
       id = Number(form.strategy_id);
     } else if (trades && Array.isArray(trades) && trades.length > 0) {
-      // Use one greater than max id in trades to avoid collisions (for demo paper trading)
       id = Math.max(...trades.map(t => typeof t.id === "number" ? t.id : 0), 0) + 1;
     } else {
-      // Fallback to 1 as starter id
       id = 1;
     }
     if (!id || !Number.isFinite(id)) {
@@ -128,19 +210,22 @@ export default function Trading() {
     }
 
     try {
-      // OpenAPI spec: POST /trades with PaperTrade payload
+      // Always use market price if available
       const tradePayload = {
-        id, // always present
+        id,
         asset: form.asset.trim().toUpperCase(),
         side: form.side,
         qty: Number(form.qty),
-        price: Number(form.price),
+        price:
+          isFinite(Number(marketPrice))
+            ? Number(marketPrice)
+            : Number(form.price), // fallback to whatever user has input
         timestamp: new Date().toISOString(),
       };
       if (form.strategy_id) {
         tradePayload.strategy_id = Number(form.strategy_id);
       }
-      const resp = await apiFetch("/trades", {
+      await apiFetch("/trades", {
         method: "POST",
         data: tradePayload,
         token,
@@ -153,7 +238,7 @@ export default function Trading() {
         price: "",
         strategy_id: "",
       });
-      // Immediately refresh trades/portfolio for feedback
+      setMarketPrice(null);
       fetchAll();
     } catch (err) {
       setFormError(
@@ -164,15 +249,73 @@ export default function Trading() {
     }
   }
 
+  // Compute profit/loss for each trade (realized: per-close buy-sell pairs for an asset)
+  // Only use trades belonging to the same asset for PnL, assume FIFO.
+  function computeTradePnL(tradesList) {
+    // Map asset to positions
+    const pnls = [];
+    const assetMap = {};
+    for (const trade of tradesList) {
+      if (!trade || !trade.side || !trade.price || !trade.qty) {
+        pnls.push(null);
+        continue;
+      }
+      const asset = String(trade.asset).toUpperCase();
+      if (!assetMap[asset]) assetMap[asset] = [];
+      if (trade.side === "buy") {
+        assetMap[asset].push({ ...trade, remain: Number(trade.qty) });
+        pnls.push(null); // buy doesn't realize pnl yet
+      } else if (trade.side === "sell") {
+        // Realize PnL on sold qty; match to earlier buys FIFO
+        let remainToSell = Number(trade.qty);
+        let pnl = 0;
+        let buys = assetMap[asset];
+        if (!Array.isArray(buys) || buys.length === 0) {
+          pnls.push(null);
+          continue; // No buys to match against
+        }
+        while (remainToSell > 0 && buys.length > 0) {
+          const buy = buys[0];
+          const matchQty = Math.min(buy.remain, remainToSell);
+          pnl += matchQty * (Number(trade.price) - Number(buy.price));
+          buy.remain -= matchQty;
+          remainToSell -= matchQty;
+          if (buy.remain <= 0) buys.shift();
+        }
+        pnls.push(Number(pnl.toFixed(2)));
+      } else {
+        pnls.push(null);
+      }
+    }
+    return pnls;
+  }
+
+  // For legacy UI blocks: display trade log, include new columns (timestamp, action, asset, profit/loss)
+  const tradePnLs = computeTradePnL(trades);
+
   // UI
   return (
     <section className="trading">
       <h2>Paper Trading</h2>
       <div style={{ margin: "1rem 0 1.6rem" }}>
         <p>
-          View your real-time paper portfolio. Simulate a buy/sell trade below.
-          {" "}All actions affect only your demo balance.
+          Simulate trades using current market prices. Your virtual capital and trade log update in real time.
         </p>
+      </div>
+
+      {/* Virtual Capital Tracker */}
+      <div style={{
+        background: "#f5fafb",
+        borderRadius: 9,
+        border: "1.5px solid var(--border-color,#e0e7ef)",
+        padding: "11px 17px",
+        width: "max-content",
+        fontWeight: 600,
+        fontSize: "1.15em",
+        marginBottom: "1.2rem",
+        color: "#3182ce"
+      }}>
+        Virtual Capital: <span style={{ color: "#10b981", fontWeight: 700 }}>${virtualCapital.toLocaleString(undefined, {maximumFractionDigits: 2})}</span>
       </div>
 
       {error && (
@@ -187,7 +330,7 @@ export default function Trading() {
         </div>
       )}
 
-      {/* SECTION: Portfolio Positions Table */}
+      {/* Portfolio Section */}
       <div>
         <h3 style={{ margin: "1.3rem 0 0.2rem" }}>Portfolio Holdings</h3>
         {
@@ -219,7 +362,7 @@ export default function Trading() {
         }
       </div>
 
-      {/* SECTION: Trade Form */}
+      {/* Trade Form Section */}
       <form
         className="trading-form"
         style={{
@@ -228,7 +371,7 @@ export default function Trading() {
           background: "var(--bg-secondary)",
           borderRadius: 11,
           border: "1px solid var(--border-color,#e9ecef)",
-          maxWidth: 440,
+          maxWidth: 490,
         }}
         onSubmit={onSubmitTrade}
         aria-labelledby="trade-form-title"
@@ -247,7 +390,7 @@ export default function Trading() {
               required
               autoComplete="on"
               disabled={formLoading}
-              style={{ width: "100%", minWidth: 60 }}
+              style={{ width: "100%", minWidth: 60, textTransform: "uppercase" }}
             />
           </label>
           <label style={{ flex: "1 1 93px" }}>
@@ -293,9 +436,21 @@ export default function Trading() {
               step={0.0001}
               placeholder="e.g. 180.01"
               required
-              disabled={formLoading}
+              disabled={formLoading || !!marketPrice}
               style={{ width: "100%", minWidth: 50 }}
+              readOnly={!!marketPrice}
             />
+            {/* Price fetch display */}
+            {form.asset && marketPrice &&
+              <span style={{ fontSize: 13, color: "#10b981", fontWeight: 600, marginLeft: 7 }}>
+                (Live market: ${Number(marketPrice).toLocaleString(undefined, { maximumFractionDigits: 4 })})
+              </span>
+            }
+            {form.asset && !marketPrice &&
+              <span style={{ fontSize: 12, color: "#888", marginLeft: 7 }}>
+                (No market price found)
+              </span>
+            }
           </label>
         </div>
         <div style={{ marginTop: 8 }}>
@@ -345,42 +500,66 @@ export default function Trading() {
         )}
       </form>
 
-      {/* SECTION: Trade Log */}
+      {/* Trade Log Section */}
       <div>
         <h3 style={{ marginTop: "2.2rem", marginBottom: ".7rem" }}>Trade Log</h3>
         {loading ? <div>Loading trades...</div> :
-          <div className="trading-table" style={{ display: "flex", flexWrap: "wrap", gap: "1em" }}>
-            {trades && trades.length > 0 ? trades.map((t) => (
-              <div key={String(t.id ?? t.asset ?? Math.random())} className="trading-position-card"
-                style={{
-                  minWidth: 225, background: "#f3f3f8", borderRadius: 11, padding: 16, border: "1px solid var(--border-color,#e9ecef)", boxShadow: "0 1px 7px rgba(190,190,210,0.07)"
-                }}
-              >
-                <div style={{ fontWeight: 600 }}>
-                  {typeof t.side === "string" ? (t.side === "buy" ? "Bought" : "Sold") : "Trade"}{" "}
-                  {typeof t.qty === "number" || typeof t.qty === "string" ? t.qty : "--"}{" "}
-                  <span style={{ color: "#2763db" }}>
-                    {typeof t.asset === "string" ? t.asset : String(t.asset ?? "")}
-                  </span>
-                </div>
-                <div>
-                  At price: <b>
-                    {isFinite(Number(t.price))
-                      ? `$${Number(t.price).toLocaleString(undefined, { maximumFractionDigits: 4 })}`
-                      : "--"}
-                  </b>
-                </div>
-                {t.strategy_id && <div>Strategy #{String(t.strategy_id)}</div>}
-                <div style={{ color: "#888", fontSize: ".97em" }}>
-                  {formatTime(t.timestamp)}
-                </div>
-              </div>
-            )) : (
-              <div style={{ color: "#888" }}>
-                No trades found. Simulate a trade above.
-              </div>
-            )}
-          </div>
+          trades && trades.length > 0 ? (
+            <div style={{ overflowX: "auto" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse", borderRadius: 10, background: "var(--bg-secondary)", marginBottom: 10 }}>
+                <thead>
+                  <tr style={{ background: "#e6f7ec", textAlign: "left" }}>
+                    <th style={{ padding: "8px 10px" }}>Timestamp</th>
+                    <th style={{ padding: "8px 10px" }}>Action</th>
+                    <th style={{ padding: "8px 10px" }}>Asset</th>
+                    <th style={{ padding: "8px 10px" }}>Qty</th>
+                    <th style={{ padding: "8px 10px" }}>Price</th>
+                    <th style={{ padding: "8px 10px" }}>Profit/Loss</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {trades.map((t, idx) => (
+                    <tr key={String(t.id ?? t.asset ?? idx)} style={{ background: idx % 2 ? "#fafcff" : undefined }}>
+                      <td style={{ padding: "6px 10px", fontFamily: "monospace" }}>{formatTime(t.timestamp)}</td>
+                      <td style={{ padding: "6px 10px" }}>
+                        {typeof t.side === "string"
+                          ? (t.side === "buy" ? "Buy" : t.side === "sell" ? "Sell" : t.side)
+                          : t.side}
+                      </td>
+                      <td style={{ padding: "6px 10px", fontWeight: 600 }}>{t.asset?.toUpperCase() ?? "--"}</td>
+                      <td style={{ padding: "6px 10px" }}>{t.qty}</td>
+                      <td style={{ padding: "6px 10px" }}>
+                        {isFinite(Number(t.price))
+                          ? `$${Number(t.price).toLocaleString(undefined, { maximumFractionDigits: 4 })}`
+                          : "--"}
+                      </td>
+                      <td style={{
+                        padding: "6px 10px",
+                        color:
+                          tradePnLs[idx] > 0
+                            ? "#10b981"
+                            : tradePnLs[idx] < 0
+                              ? "#ef4444"
+                              : "#666"
+                      }}>
+                        {tradePnLs[idx] == null
+                          ? "--"
+                          : tradePnLs[idx] > 0
+                            ? `+$${tradePnLs[idx].toLocaleString(undefined, {maximumFractionDigits:2})}`
+                            : tradePnLs[idx] < 0
+                              ? `-$${Math.abs(tradePnLs[idx]).toLocaleString(undefined, {maximumFractionDigits:2})}`
+                              : "$0.00"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div style={{ color: "#888" }}>
+              No trades found. Simulate a trade above.
+            </div>
+          )
         }
       </div>
 
@@ -401,14 +580,17 @@ export default function Trading() {
           margin-top: 2.5px;
           padding: 7px 8px;
         }
+        .trading-log-table th, .trading-log-table td {
+          border-bottom: 1px solid var(--border-color,#e5ecef);
+        }
+        .trading-log-table th { font-weight: 650; }
       `}</style>
     </section>
   );
 }
 
 /**
- * Returns open positions based on portfolio entries. (In this backend, just return portfolio assets with qty > 0)
- * Could be expanded with live price/PnL if provided by backend.
+ * Returns open positions based on portfolio entries. In this backend, just return portfolio assets with qty > 0.
  */
 function getOpenPositions(portfolioResp, tradesResp) {
   if (!Array.isArray(portfolioResp)) return [];
