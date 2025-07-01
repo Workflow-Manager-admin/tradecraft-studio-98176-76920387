@@ -55,7 +55,8 @@ export default function Register() {
       });
       if (resp && (resp.id || resp.email || resp.user)) {
         setSuccess(true);
-        setTimeout(() => navigate("/login", { replace: true }), 1200);
+        // Redirect to /login after a brief visual success (UX), always clean navigation
+        setTimeout(() => navigate("/login", { replace: true }), 1300);
       } else {
         setError("Registration successful, but backend returned an unexpected response.");
       }
